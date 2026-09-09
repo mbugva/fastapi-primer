@@ -1,0 +1,349 @@
+commit dbc14ce363c8203da67a0d83b098c173391a36da (HEAD -> dev, origin/dev)
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Wed Sep 2 10:58:51 2026 +0300
+
+    feat: wireup s3 for image storage
+    
+    CHANGES:
+    - setup an s3 bucket in AWs withthe right permissions and policies.
+      using boto3 in our project we connected them together.
+    - rewrote the update and delete image utils functions, to work
+      asynchronously within the app. these also now work with s3 buckets and
+      not the database itself.
+    - IAM policies and users were used in AWS to ensure security
+
+commit 19378ccf172238cdf0bac0413c591ea523305742
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Aug 27 11:46:57 2026 +0300
+
+    feat: add alembic migrations
+    
+    CHANGES:
+    - added a top layer, for the migrations. this is alembic and itensures I
+      donthave to fiddle with SQL queries on each instance. this is better
+      though I actaully did like working with SQL :/
+    - I have used mariadb(mysql) and not postgres, which is an industry
+      standard at this point. I like working with databases inthe cli, and
+      this is how I learnt to work with them. postgres's weird queries like
+      "\d", "\dt", "\q" make absolutely no sense to make. I like the other
+      sql-based DBMS syntax like "show tables" etc...
+    
+    CONSIDERATIONS:
+    - learn alembic deeply, this was a brief overview, not that deep. I know
+      how tomake it work but not enough!
+
+commit 214456ac40d01f0180ebd104d8bbce08516e32d7
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Tue Aug 25 09:16:30 2026 +0300
+
+    feat: setup password reset flow
+    
+    CHANGES:
+    - add the password reset dataflow, both within the application if a user
+      remember their password and wants to change it, or outside of the
+      application, if a user forgot their password and want to setup a new one
+      to login.
+    - this utilizes tokens for security and works as a background task to
+      prevent holding up system resources
+    - this workflow workr both in the frontend and application, or simply
+      using the "/docs" endpoints.
+    
+    CONSIDERATIONS:
+    - used Resed, which is a Sass, thatallows easy sending and receiving of
+      emails. it only donwfall isthat one can only send emails from the
+      email they registered with, up until you officially register a
+      separate domain and use that as the "MAIL_FROM" in your ".env" file.
+    - As such, I think its a good idea to roll with gmail(google) based smtp
+      server, upuntil you officially register your own domain name, and can
+      now send emails tomore people flexibly.
+
+commit 15c48ed93257874ba072e416e45bf107ffeb6868
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Mon Aug 10 14:58:02 2026 +0300
+
+    feat: add pagination!
+    
+    CHANGES:
+    - add pagination to the application. moreso routes that interact with
+      the posts.. utilized limit-offset fornow, though I would love to write
+      this with cursor-based pagination in the future.
+    - also committed some of the db filler code, since I think the filler
+      posts themselves were quite interesting to read. also the db has been
+      uploaded intentionally:)
+
+commit 334563aaa7d02d7b599b54ec73a215d1b564cdc1
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Fri Aug 7 12:01:32 2026 +0300
+
+    feat: enable file uploads
+    
+    CHANGES:
+    - allows users to update/delete their profile pictures instantly. this
+      work amazing since I recall how I tried to implement this
+      functionality a while back in Flask and how much i struggled to make
+      it stick. now its near flawless, but good thing is I can still recall
+      how I glued it together, and build on that with this(somehow)
+    - added a Makefile because why not? now I just run make and wallah1!?
+      everything is up and running, no recalling archaic commands :)
+    
+    CONTEXT:
+    - the image profile was previously hardcoded into the database, hence
+      user created an account with a present profile. this is eliminated
+      now. however I can see how the former would be more efficient, since
+      each user uploading their own image files would takes up tonnes of
+      space eventually, and managing all of that requires somes heavy
+      resources.
+    
+    CONSIDERATIONS:
+    - as app grow I might need to change these to use S3 buckets/Google
+      Cloud Storage and a CDN to serve static files faster. Yesirrr!
+
+commit 1a50b176236eeaef73b712376d9f7dfcf23ec45f
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Aug 6 12:02:26 2026 +0300
+
+    chore: project restructure
+    
+    CHANGES:
+    - moved things from the webapp/ directory to the app/ directory, this
+      make it easier and more standard id deployment will bedone by vercel.
+    - revisit the authentication and authorization segements, understanding
+      them better per say...
+    - remove the api_v1 and the routes directories, mergiing them into one
+      routes dir with nested pages and api subdirectories, much cleaner.
+      i think?
+    - allow for long posttruncation in both the main "/" home pages and the
+      user posts "/posts/{use_id}" page. all using jinja2 synatx, really
+      nice
+
+commit e9b40a637de319873a6879fe1f05dd262c8ec104
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Tue Jul 21 07:17:16 2026 +0300
+
+    refactor: moved the api to a separate folder
+    
+    CHANGES:
+    - moved the api directory to a separate directory in api_v1/ as I think
+      it needs to be separate for testing purposes and stuff,
+    - chnaged how I intialize and run the project, previously I had done it
+      in a way common to flask applications with the factory method, but now
+      i added a pyproject.toml file, which maked startup waaayyyy easier, I
+      can simply $ fastapi dev and the project is running
+
+commit c20ee8f79f5f8515f5694101fc4b74f52fb50f7b
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Tue Jul 7 22:58:17 2026 +0300
+
+    chore: restructure project
+    
+    CHANGES:
+    - moved the pages(views) into their own folders, separate from the api
+      one, which helps claer up possible confusion. also changed up the
+      main.py file, since the pages routers moved location
+
+commit bb2ca167052bfd7ad4729183e9db8145b40c014f
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Tue Jul 7 10:19:53 2026 +0300
+
+    feat: implement authorization
+    
+    CHANGES:
+    - ensure routes are protected, adding authorization, which means some
+      sensitive routes cannot be accessed until a user is authenticated and
+      has appropriate access levels
+    - remove the floss message. I think it there in the LICENSE, plus the
+      openAPI page, which is sufficient
+
+commit 0ada151671b696a18e6d609ecb9ae3f34a9cc3e5
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Jul 2 13:54:27 2026 +0300
+
+    feat: implement authentication
+    
+    CHANGES:
+    - implement secure password hashing with argon2
+    - add JWT for secure user sessions
+    - build registration and login endpoints on the backend, and also add
+      the pages using jinja2 templates
+
+commit 44b482ab7172f4cdfb541ad3258c3e19d3730662
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Jun 25 11:57:13 2026 +0300
+
+    feat: add some frontend forms
+    
+    CHANGES:
+    - add basic forms for creating new posts, editing them and deleting
+      them. basically performing the 4 CRUD operations in the frontend. It
+      now also has instant reloading to reflect this new changes, and pretty
+      much behaves like a SPA(single page application).
+    - change ordering of posts, allowing them to appear as most recent post
+      onwards.
+    - updated my main.py file, adding the needed GPLv3 license, and also
+      adding some data in the app instance.
+    - moved the "api" folder to within the routes, making it easier to
+      decipher the variousseparation of concerns here. having a "routes/" &
+      an "api/" folder was confusing since "apis" are also part of the
+      routes!
+
+commit 3bd831758d83984d3f01a63262b188120d2fddfb
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Mon Jun 22 13:29:11 2026 +0300
+
+    feat(async): made app async
+    
+    CHANGES:
+    - changed the database to use asynchronous methods and sessions, this in
+      turn caused me to use async routes within the application. ensured
+      eager loading and fastAPI exception handlers!
+    
+    CONSIDERATIONS:
+    - async really provides subliminal API speed gains in small standalone
+      API's, it instead begins to shine in large-scale concurrent
+      applications. FastAPI is also able to handle both sync and async
+      request at the same time!
+    - do not use blocking modules in async requests, such as 'requests'
+      library. instead look for async ones such as 'httpx'
+
+commit 381c3f67ef5d6629f123f97923672648d3a8924d
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Mon Jun 22 10:08:27 2026 +0300
+
+    feat(crud): implement crud operations
+    
+    CHANGES:
+    - added the various C(reate) R(ead) U(pdate) & D(elete) operations on
+      all endpoints, atleast the api endpoints. this makes the RestApi
+      complete.
+    - modularize the database functionality into a single ./database/
+      directory. this will contain the config.py file and models.py file,
+      allowing for imports from this single directory.
+
+commit 91f189d623de5c877e7c982951bc8efa3a27ee4a
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Fri Jun 19 00:14:46 2026 +0300
+
+    docs: better project structure
+    
+    CHANGES:
+    - updated the docstrings project wise, allowing for better documentation
+      project wise. this has been influenced msotly by the emacs-bender,
+      lisp docsstrings are amazing. also learnt python inherited docstrings
+      and love for docs from it, and decided to use it more.
+    - deleted the '__init__.py' file in my schemas, as I found it unexessary
+      since I have already made the parent directory a module. also no
+      intense nesting in there, so things should work fine withoout it
+    - renamed the routers module to routes. maked sensethat way. also
+      renamed most of the functions, tobe easier to recall
+
+commit 77b4f0ba2cd160b5b656e4e8344886f919021a9c
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Jun 18 22:24:51 2026 +0300
+
+    feat(sqlite): added sqlite as a database
+    
+    CHANGES:
+    - was previously storing data in a python list, which does not scale or
+      persist across session. added a simple Sqlite database, which helped
+      me get into app modularization, database relationships and models,
+      better api design and such.
+    - the sqlite db persists across sessions, which is more prod ready.
+      also, using a SQLAlchemy ORM allows one to easily patch in any
+      database oftheir choosing(sqlite, mysql, mariadb, postgres and such).
+      I really liked working with raw sql dues to stored procedures,
+      triggers and such, but I can see mysqlf working with an ORM just for
+      the plug and play fatures here
+    
+    CONSIDERATIONS:
+    - figure out how to create stored procedures and triggers in an ORM,
+      moreso the SQLAlchemy ORM.
+
+commit ea58e527de4e8e28926dd8388cb0098fb9a0a324
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Wed Jun 17 11:43:41 2026 +0300
+
+    fix(webapp): better file-structure
+    
+    CHANGES:
+    - had files flying allover the room, fixed the structure of the program,
+      making it more modular,using the all-familar factory-pattern, that I
+      was used to in flask. now Its like working in flask apps, but with
+      modern and dev friendly tools!!
+    
+      P.S: Never liked you too Django :)
+
+commit 069bbdce365a717ac570b4e792f88092ad9385eb
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Tue Jun 16 11:58:40 2026 +0300
+
+    feat(pydantic): utilize pydantic schemas
+    
+    CHANGES:
+    - utilize pydantic schemas for serialization, validation and
+      documentation. Similar to what we knew in node.js as validators, now
+      these are much more tightly knit into the system, allowing for
+      automatic docs generation and validation.
+    - also got familiar with reading the stack trace, which helps in
+      performing debugging much easier.
+
+commit db674749ec7450f24c3b0188032cfa701cb648db
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Mon Jun 15 15:33:25 2026 +0300
+
+    feat: path parameters
+    
+    CHANGES:
+    - add path parameters to the /posts endpoint, allowing users to narrow
+      down search path to specific posts.
+    - incorporate error handling, and validation handling for each path
+    
+    CONSIDERATIONS:
+    - endpoints are getting a bit too many, now would be a good time to
+      split up my main.py file into various modules, making navigation and
+      debugging much simpler
+
+commit 14f8f9e0a7fdb9b6dbe706c2817110a670ea7ac5
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Sat Jun 13 16:07:10 2026 +0300
+
+    feat(templates): add the styling
+    
+    CHANGES:
+    - add basic styling with bootstrap and stuff. also add the images
+      folder, making the site better aesthetically.
+
+commit 503cf524e0a99e2fdcfbe7fe210c3f49925cf37b
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Sat Jun 13 12:02:10 2026 +0300
+
+    feat(jinja2): add basic jinja2 template
+    
+    CHANGES:
+    - added some jinja2 templates into the templates directory. Was familiar
+      with jinja2, coming from flask, so this was a nice refresher. did
+      template inheritance, alongside for iteration and conditional loops.
+
+commit f37314bb95c031de2124f4836c06254959ae2724
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Fri Jun 12 11:56:50 2026 +0300
+
+    feat: getting started
+    
+    CHANGES:
+    - built a basic server and got it running nicely. everything is in a
+      single main.py file, which is not great for separation of concerns and
+      such, but I will work on this later on.
+
+commit 45cc8d06a5f9fd5431267eeab92dda10af5dd63b
+Author: mbvgua <mbvgua+dev@gmail.com>
+Date:   Thu Jun 11 15:06:30 2026 +0300
+
+    docs: initial commit
+    
+    CHANGES:
+    - initial commit for repo, this marks me starting the project. files
+      included are:
+        * readme.md -> give general description of what the project is about
+        * LICENSE -> as advertised
+        * .gitignore -> ignores my unneccesary files, such as the .venv and
+          documentation for the project
