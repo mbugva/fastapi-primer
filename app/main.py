@@ -61,13 +61,13 @@ templates: Jinja2Templates = Jinja2Templates(directory="templates")  # html
 app.mount("/static", StaticFiles(directory="static"), name="static")  # css
 
 # import & register the routes
-from app.routes.pages.home import router as home_router
-from app.routes.pages.posts import router as posts_router
-from app.routes.pages.users import router as users_router
-from app.routes.pages.auth import router as auth_router
-from app.routes.api_v1.users import router as users_api_router
-from app.routes.api_v1.posts import router as posts_api_router
-from app.routes.api_v1.auth import router as auth_api_router
+from app.routers.pages.home import router as home_router
+from app.routers.pages.posts import router as posts_router
+from app.routers.pages.users import router as users_router
+from app.routers.pages.auth import router as auth_router
+from app.routers.api_v1.users import router as users_api_router
+from app.routers.api_v1.posts import router as posts_api_router
+from app.routers.api_v1.auth import router as auth_api_router
 
 app.include_router(home_router)
 app.include_router(users_router)
